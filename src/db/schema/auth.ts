@@ -9,11 +9,6 @@ export const user = pgTable(
     email: text("email").notNull().unique(),
     emailVerified: boolean("email_verified").default(false).notNull(),
     image: text("image"),
-    role: text("role", {
-      enum: ["teacher", "student"],
-    })
-      .default("student")
-      .notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
     })
@@ -26,7 +21,6 @@ export const user = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("user_role_idx").on(table.role)],
 );
 
 export const session = pgTable(
