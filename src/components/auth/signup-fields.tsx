@@ -2,13 +2,7 @@
 
 import { Control } from "react-hook-form";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/auth/password-input";
@@ -30,11 +24,7 @@ export function SignupFields({ control }: SignupFieldsProps) {
             <FormLabel>Full Name</FormLabel>
 
             <FormControl>
-              <Input
-                placeholder="John Doe"
-                autoComplete="name"
-                {...field}
-              />
+              <Input placeholder="John Doe" autoComplete="name" {...field} />
             </FormControl>
 
             <FormMessage />
@@ -50,12 +40,7 @@ export function SignupFields({ control }: SignupFieldsProps) {
             <FormLabel>Email</FormLabel>
 
             <FormControl>
-              <Input
-                type="email"
-                placeholder="john@example.com"
-                autoComplete="email"
-                {...field}
-              />
+              <Input type="email" placeholder="john@example.com" autoComplete="email" {...field} />
             </FormControl>
 
             <FormMessage />

@@ -9,38 +9,37 @@ import { cn } from "@/lib/utils";
 
 type PasswordInputProps = React.ComponentProps<"input">;
 
-export const PasswordInput = React.forwardRef<
-  HTMLInputElement,
-  PasswordInputProps
->(({ className, ...props }, ref) => {
-  const [showPassword, setShowPassword] = React.useState(false);
+export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+  ({ className, ...props }, ref) => {
+    const [showPassword, setShowPassword] = React.useState(false);
 
-  return (
-    <div className="relative">
-      <Input
-        ref={ref}
-        type={showPassword ? "text" : "password"}
-        className={cn("pr-10", className)}
-        {...props}
-      />
+    return (
+      <div className="relative">
+        <Input
+          ref={ref}
+          type={showPassword ? "text" : "password"}
+          className={cn("pr-10", className)}
+          {...props}
+        />
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        tabIndex={-1}
-        onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 hover:bg-transparent"
-        aria-label={showPassword ? "Hide password" : "Show password"}
-      >
-        {showPassword ? (
-          <EyeOff className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <Eye className="h-4 w-4 text-muted-foreground" />
-        )}
-      </Button>
-    </div>
-  );
-});
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          tabIndex={-1}
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 hover:bg-transparent"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+        >
+          {showPassword ? (
+            <EyeOff className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <Eye className="h-4 w-4 text-muted-foreground" />
+          )}
+        </Button>
+      </div>
+    );
+  },
+);
 
 PasswordInput.displayName = "PasswordInput";

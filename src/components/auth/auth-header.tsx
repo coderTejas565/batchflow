@@ -5,10 +5,7 @@ interface AuthHeaderProps {
   description: string;
 }
 
-export function AuthHeader({
-  title,
-  description,
-}: AuthHeaderProps) {
+export function AuthHeader({ title, description }: AuthHeaderProps) {
   return (
     <div className="flex flex-col items-center space-y-4 text-center">
       <Link href="/" className="flex items-center gap-2">
@@ -16,19 +13,13 @@ export function AuthHeader({
           B
         </div>
 
-        <span className="text-xl font-bold tracking-tight">
-          BatchFlow
-        </span>
+        <span className="text-xl font-bold tracking-tight">BatchFlow</span>
       </Link>
 
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">
-          {title}
-        </h1>
+        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
 
-        <p className="text-sm text-muted-foreground">
-          {description}
-        </p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
   );

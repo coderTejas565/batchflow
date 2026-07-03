@@ -6,11 +6,7 @@ interface AuthFooterProps {
   href: string;
 }
 
-export function AuthFooter({
-  text,
-  linkText,
-  href,
-}: AuthFooterProps) {
+export function AuthFooter({ text, linkText, href }: AuthFooterProps) {
   return (
     <div className="text-center text-sm text-muted-foreground">
       <span>{text} </span>
