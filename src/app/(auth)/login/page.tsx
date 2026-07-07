@@ -14,11 +14,7 @@ export default function LoginPage() {
 
         <LoginForm />
 
-        <AuthFooter
-          text="Don't have an account?"
-          linkText="Create one"
-          href="/signup"
-        />
+        <AuthFooter text="Don't have an account?" linkText="Create one" href="/signup" />
       </AuthCard>
     </main>
   );

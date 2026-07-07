@@ -4,11 +4,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { authClient } from "@/lib/auth-client";
-import {
-  loginSchema,
-  type LoginFormValues,
-} from "@/lib/validations/auth";
+import { authClient } from "@/lib/auth/auth-client";
+import { loginSchema, type LoginFormValues } from "@/lib/validations/auth";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -44,20 +41,11 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <LoginFields control={form.control} />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting
-            ? "Signing in..."
-            : "Sign In"}
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "Signing in..." : "Sign In"}
         </Button>
       </form>
     </Form>

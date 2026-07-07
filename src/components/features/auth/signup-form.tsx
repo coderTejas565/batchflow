@@ -5,11 +5,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { authClient } from "@/lib/auth-client";
-import {
-  signupSchema,
-  type SignupFormValues,
-} from "@/lib/validations/auth";
+import { authClient } from "@/lib/auth/auth-client";
+import { signupSchema, type SignupFormValues } from "@/lib/validations/auth";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -51,17 +48,10 @@ export function SignupForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <SignupFields control={form.control} />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isLoading}
-        >
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Creating account..." : "Create Account"}
         </Button>
       </form>

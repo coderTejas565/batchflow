@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import { getSession } from "@/lib/session";
-import { instituteService } from "@/services/institute.service";
+import { getSession } from "@/lib/auth/session";
+import { getUserInstitutes } from "@/modules/institute/institute.service";
 
 export default async function AppPage() {
   const session = await getSession();
@@ -10,13 +10,11 @@ export default async function AppPage() {
     redirect("/login");
   }
 
-  const institutes = await instituteService.getUserInstitutes(
-    session.user.id
-  );
+  const institutes = await getUserInstitutes(session.user.id);
 
   if (institutes.length === 0) {
-    redirect("/onboarding");
+    redirect("/app/onboarding");
   }
 
-  redirect("/dashboard");
+  redirect(`/app/${institutes[0].slug}`);
 }
