@@ -10,10 +10,7 @@ type WorkspaceLayoutProps = {
   }>;
 };
 
-export default async function WorkspaceLayout({
-  children,
-  params,
-}: WorkspaceLayoutProps) {
+export default async function WorkspaceLayout({ children, params }: WorkspaceLayoutProps) {
   const { slug } = await params;
 
   const workspace = await getCurrentWorkspace(slug);

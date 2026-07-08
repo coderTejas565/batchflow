@@ -40,7 +40,7 @@ export async function createInstitute(input: unknown, userId: string): Promise<I
         id: instituteId,
         name,
         slug,
-        createdBy: userId,
+        ownerId: userId,
       });
 
       await repo.addMember({

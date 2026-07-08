@@ -10,10 +10,7 @@ type LoadWorkspaceParams = {
   userId: string;
 };
 
-export async function loadWorkspace({
-  slug,
-  userId,
-}: LoadWorkspaceParams): Promise<WorkspaceDTO> {
+export async function loadWorkspace({ slug, userId }: LoadWorkspaceParams): Promise<WorkspaceDTO> {
   try {
     return await getWorkspace({
       slug,

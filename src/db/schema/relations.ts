@@ -2,12 +2,7 @@ import { relations } from "drizzle-orm";
 
 import { user, session, account } from "./auth";
 
-import {
-  institute,
-  instituteMember,
-  teacherInvite,
-} from "./institute";
-
+import { institute, instituteMember, teacherInvite } from "./institute";
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
@@ -32,44 +27,35 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const instituteRelations = relations(
-  institute,
-  ({ one, many }) => ({
-    owner: one(user, {
-      fields: [institute.createdBy],
-      references: [user.id],
-    }),
+export const instituteRelations = relations(institute, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [institute.ownerId],
+    references: [user.id],
+  }),
 
-    members: many(instituteMember),
-  })
-);
+  members: many(instituteMember),
+}));
 
-export const instituteMemberRelations = relations(
-  instituteMember,
-  ({ one }) => ({
-    user: one(user, {
-      fields: [instituteMember.userId],
-      references: [user.id],
-    }),
+export const instituteMemberRelations = relations(instituteMember, ({ one }) => ({
+  user: one(user, {
+    fields: [instituteMember.userId],
+    references: [user.id],
+  }),
 
-    institute: one(institute, {
-      fields: [instituteMember.instituteId],
-      references: [institute.id],
-    }),
-  })
-);
+  institute: one(institute, {
+    fields: [instituteMember.instituteId],
+    references: [institute.id],
+  }),
+}));
 
-export const teacherInviteRelations = relations(
-  teacherInvite,
-  ({ one }) => ({
-    institute: one(institute, {
-      fields: [teacherInvite.instituteId],
-      references: [institute.id],
-    }),
+export const teacherInviteRelations = relations(teacherInvite, ({ one }) => ({
+  institute: one(institute, {
+    fields: [teacherInvite.instituteId],
+    references: [institute.id],
+  }),
 
-    inviter: one(user, {
-      fields: [teacherInvite.invitedBy],
-      references: [user.id],
-    }),
-  })
-);
+  inviter: one(user, {
+    fields: [teacherInvite.invitedBy],
+    references: [user.id],
+  }),
+}));

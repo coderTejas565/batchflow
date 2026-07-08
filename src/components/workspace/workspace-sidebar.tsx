@@ -30,9 +30,7 @@ const navigation = [
   },
 ];
 
-export function WorkspaceSidebar({
-  workspace,
-}: WorkspaceSidebarProps) {
+export function WorkspaceSidebar({ workspace }: WorkspaceSidebarProps) {
   return (
     <aside className="flex w-72 flex-col border-r bg-background">
       <div className="border-b p-6">
@@ -42,13 +40,9 @@ export function WorkspaceSidebar({
           </div>
 
           <div className="min-w-0">
-            <h2 className="truncate font-semibold">
-              {workspace.institute.name}
-            </h2>
+            <h2 className="truncate font-semibold">{workspace.institute.name}</h2>
 
-            <p className="text-sm text-muted-foreground capitalize">
-              {workspace.membership.role}
-            </p>
+            <p className="text-sm text-muted-foreground capitalize">{workspace.membership.role}</p>
           </div>
         </div>
       </div>

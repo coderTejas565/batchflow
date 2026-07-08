@@ -6,9 +6,7 @@ type WorkspaceTopbarProps = {
   workspace: WorkspaceDTO;
 };
 
-export function WorkspaceTopbar({
-  workspace,
-}: WorkspaceTopbarProps) {
+export function WorkspaceTopbar({ workspace }: WorkspaceTopbarProps) {
   const initials = workspace.user.name
     .split(" ")
     .map((part) => part[0])
@@ -19,24 +17,16 @@ export function WorkspaceTopbar({
   return (
     <header className="flex h-16 items-center justify-between border-b bg-background px-6">
       <div>
-        <h1 className="text-lg font-semibold">
-          {workspace.institute.name}
-        </h1>
+        <h1 className="text-lg font-semibold">{workspace.institute.name}</h1>
 
-        <p className="text-sm text-muted-foreground capitalize">
-          {workspace.membership.role}
-        </p>
+        <p className="text-sm text-muted-foreground capitalize">{workspace.membership.role}</p>
       </div>
 
       <div className="flex items-center gap-3">
         <div className="text-right">
-          <p className="text-sm font-medium">
-            {workspace.user.name}
-          </p>
+          <p className="text-sm font-medium">{workspace.user.name}</p>
 
-          <p className="text-xs text-muted-foreground">
-            {workspace.user.email}
-          </p>
+          <p className="text-xs text-muted-foreground">{workspace.user.email}</p>
         </div>
 
         <Avatar>

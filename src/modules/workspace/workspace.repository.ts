@@ -10,10 +10,7 @@ type FindWorkspaceParams = {
   userId: string;
 };
 
-async function findWorkspace({
-  slug,
-  userId,
-}: FindWorkspaceParams) {
+async function findWorkspace({ slug, userId }: FindWorkspaceParams) {
   const [workspace] = await db
     .select({
       institute: {
@@ -36,20 +33,9 @@ async function findWorkspace({
       },
     })
     .from(institute)
-    .innerJoin(
-      instituteMember,
-      eq(instituteMember.instituteId, institute.id)
-    )
-    .innerJoin(
-      user,
-      eq(user.id, instituteMember.userId)
-    )
-    .where(
-      and(
-        eq(institute.slug, slug),
-        eq(instituteMember.userId, userId)
-      )
-    )
+    .innerJoin(instituteMember, eq(instituteMember.instituteId, institute.id))
+    .innerJoin(user, eq(user.id, instituteMember.userId))
+    .where(and(eq(institute.slug, slug), eq(instituteMember.userId, userId)))
     .limit(1);
 
   return workspace ?? null;

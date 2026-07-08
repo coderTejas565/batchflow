@@ -21,7 +21,7 @@ export const institute = pgTable(
 
     logo: text("logo"),
 
-    createdBy: text("owner_id")
+    ownerId: text("owner_id")
       .notNull()
       .references(() => user.id, {
         onDelete: "cascade",
@@ -42,7 +42,7 @@ export const institute = pgTable(
   },
   (table) => [
     uniqueIndex("institute_slug_unique").on(table.slug),
-    index("institute_owner_idx").on(table.createdBy),
+    index("institute_owner_idx").on(table.ownerId),
   ],
 );
 
@@ -102,6 +102,10 @@ export const teacherInvite = pgTable(
         onDelete: "cascade",
       }),
 
+    acceptedBy: text("accepted_by").references(() => user.id, {
+      onDelete: "set null",
+    }),
+
     expiresAt: timestamp("expires_at", {
       withTimezone: true,
     }).notNull(),
@@ -114,6 +118,13 @@ export const teacherInvite = pgTable(
       withTimezone: true,
     })
       .defaultNow()
+      .notNull(),
+
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+    })
+      .defaultNow()
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (table) => [

@@ -8,10 +8,7 @@ type GetWorkspaceParams = {
   userId: string;
 };
 
-export async function getWorkspace({
-  slug,
-  userId,
-}: GetWorkspaceParams): Promise<WorkspaceDTO> {
+export async function getWorkspace({ slug, userId }: GetWorkspaceParams): Promise<WorkspaceDTO> {
   const workspace = await workspaceRepository.findWorkspace({
     slug,
     userId,

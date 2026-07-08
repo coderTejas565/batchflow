@@ -2,33 +2,21 @@ import { and, count, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 
-import {
-  instituteMember,
-  teacherInvite,
-} from "@/db/schema/institute";
+import { instituteMember, teacherInvite } from "@/db/schema/institute";
 
 type CountDashboardStatsParams = {
   instituteId: string;
 };
 
-async function countDashboardStats({
-  instituteId,
-}: CountDashboardStatsParams) {
-  const [
-    [{ teachers }],
-    [{ students }],
-    [{ pendingTeacherInvites }],
-  ] = await Promise.all([
+async function countDashboardStats({ instituteId }: CountDashboardStatsParams) {
+  const [[{ teachers }], [{ students }], [{ pendingTeacherInvites }]] = await Promise.all([
     db
       .select({
         teachers: count(),
       })
       .from(instituteMember)
       .where(
-        and(
-          eq(instituteMember.instituteId, instituteId),
-          eq(instituteMember.role, "teacher")
-        )
+        and(eq(instituteMember.instituteId, instituteId), eq(instituteMember.role, "teacher")),
       ),
 
     db
@@ -37,10 +25,7 @@ async function countDashboardStats({
       })
       .from(instituteMember)
       .where(
-        and(
-          eq(instituteMember.instituteId, instituteId),
-          eq(instituteMember.role, "student")
-        )
+        and(eq(instituteMember.instituteId, instituteId), eq(instituteMember.role, "student")),
       ),
 
     db
@@ -48,12 +33,7 @@ async function countDashboardStats({
         pendingTeacherInvites: count(),
       })
       .from(teacherInvite)
-      .where(
-        and(
-          eq(teacherInvite.instituteId, instituteId),
-          eq(teacherInvite.status, "pending")
-        )
-      ),
+      .where(and(eq(teacherInvite.instituteId, instituteId), eq(teacherInvite.status, "pending"))),
   ]);
 
   return {
