@@ -4,6 +4,7 @@ export type TeacherDTO = {
   email: string;
   image: string | null;
   joinedAt: Date;
+  role: "owner" | "teacher" | "student";
 };
 
 export type TeacherInviteDTO = {

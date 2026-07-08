@@ -6,6 +6,10 @@ import { instituteMember, teacherInvite } from "@/db/schema/institute";
 
 import { user } from "@/db/schema/auth";
 
+import { alias } from "drizzle-orm/pg-core";
+
+const inviter = alias(user, "inviter");
+
 type InstituteParams = {
   instituteId: string;
 };
@@ -18,6 +22,7 @@ async function findTeachers({ instituteId }: InstituteParams) {
       email: user.email,
       image: user.image,
       joinedAt: instituteMember.joinedAt,
+      role: instituteMember.role,
     })
     .from(instituteMember)
     .innerJoin(user, eq(user.id, instituteMember.userId))
@@ -33,9 +38,23 @@ async function findPendingInvites({ instituteId }: InstituteParams) {
       status: teacherInvite.status,
       expiresAt: teacherInvite.expiresAt,
       createdAt: teacherInvite.createdAt,
+
+      invitedBy: {
+        id: inviter.id,
+        name: inviter.name,
+      },
     })
     .from(teacherInvite)
-    .where(and(eq(teacherInvite.instituteId, instituteId), eq(teacherInvite.status, "pending")))
+    .innerJoin(
+      inviter,
+      eq(inviter.id, teacherInvite.invitedBy)
+    )
+    .where(
+      and(
+        eq(teacherInvite.instituteId, instituteId),
+        eq(teacherInvite.status, "pending")
+      )
+    )
     .orderBy(desc(teacherInvite.createdAt));
 }
 
