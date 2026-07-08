@@ -1,5 +1,8 @@
-export { loadWorkspace } from "./workspace.loader";
 export { getWorkspace } from "./workspace.service";
+
+export { loadWorkspace } from "./workspace.loader";
+
+export { getCurrentWorkspace } from "./workspace.cache";
 
 export { workspaceRepository } from "./workspace.repository";
 

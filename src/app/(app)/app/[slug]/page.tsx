@@ -1,6 +1,26 @@
 import { Button } from "@/components/ui/button";
 
-export default function WorkspacePage() {
+
+import { getDashboardStats } from "@/modules/dashboard";
+import { getCurrentWorkspace } from "@/modules/workspace";
+
+type WorkspacePageProps = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+export default async function WorkspacePage({
+  params,
+}: WorkspacePageProps) {
+ const { slug } = await params;
+
+  const workspace = await getCurrentWorkspace(slug);
+
+  const stats = await getDashboardStats(
+    workspace.institute.id
+  );
+
   return (
     <div className="space-y-8">
       <section>
@@ -19,7 +39,9 @@ export default function WorkspacePage() {
             Teachers
           </h2>
 
-          <p className="mt-2 text-3xl font-bold">0</p>
+          <p className="mt-2 text-3xl font-bold">
+            {stats.teachers}
+          </p>
         </div>
 
         <div className="rounded-xl border p-6">
@@ -27,7 +49,9 @@ export default function WorkspacePage() {
             Students
           </h2>
 
-          <p className="mt-2 text-3xl font-bold">0</p>
+          <p className="mt-2 text-3xl font-bold">
+            {stats.students}
+          </p>
         </div>
 
         <div className="rounded-xl border p-6">
@@ -35,7 +59,9 @@ export default function WorkspacePage() {
             Pending Invites
           </h2>
 
-          <p className="mt-2 text-3xl font-bold">0</p>
+          <p className="mt-2 text-3xl font-bold">
+            {stats.pendingTeacherInvites}
+          </p>
         </div>
       </section>
 
@@ -63,5 +89,5 @@ export default function WorkspacePage() {
         </div>
       </section>
     </div>
-);
+  );
 }

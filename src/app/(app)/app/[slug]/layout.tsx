@@ -1,6 +1,4 @@
-import { requireAuth } from "@/lib/auth/session";
-
-import { loadWorkspace  } from "@/modules/workspace";
+import { getCurrentWorkspace } from "@/modules/workspace";
 
 import { WorkspaceSidebar } from "@/components/workspace/workspace-sidebar";
 import { WorkspaceTopbar } from "@/components/workspace/workspace-topbar";
@@ -16,14 +14,9 @@ export default async function WorkspaceLayout({
   children,
   params,
 }: WorkspaceLayoutProps) {
-  const session = await requireAuth();
-
   const { slug } = await params;
 
-  const workspace = await loadWorkspace ({
-    slug,
-    userId: session.user.id,
-  });
+  const workspace = await getCurrentWorkspace(slug);
 
   return (
     <div className="flex min-h-screen">
