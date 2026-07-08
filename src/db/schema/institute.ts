@@ -1,5 +1,4 @@
 import { pgTable, text, timestamp, uniqueIndex, index, pgEnum } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 import { user } from "./auth";
 
 export const instituteRoleEnum = pgEnum("institute_role", ["owner", "teacher", "student"]);
@@ -122,36 +121,3 @@ export const teacherInvite = pgTable(
     index("teacher_invite_institute_idx").on(table.instituteId),
   ],
 );
-
-export const instituteRelations = relations(institute, ({ one, many }) => ({
-  owner: one(user, {
-    fields: [institute.createdBy],
-    references: [user.id],
-  }),
-
-  members: many(instituteMember),
-}));
-
-export const instituteMemberRelations = relations(instituteMember, ({ one }) => ({
-  user: one(user, {
-    fields: [instituteMember.userId],
-    references: [user.id],
-  }),
-
-  institute: one(institute, {
-    fields: [instituteMember.instituteId],
-    references: [institute.id],
-  }),
-}));
-
-export const teacherInviteRelations = relations(teacherInvite, ({ one }) => ({
-  institute: one(institute, {
-    fields: [teacherInvite.instituteId],
-    references: [institute.id],
-  }),
-
-  inviter: one(user, {
-    fields: [teacherInvite.invitedBy],
-    references: [user.id],
-  }),
-}));
