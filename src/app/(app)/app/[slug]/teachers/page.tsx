@@ -2,7 +2,7 @@ import { getCurrentWorkspace } from "@/modules/workspace";
 import { getTeacherPage } from "@/modules/teacher";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { InviteTeacherButton } from "@/components/teacher/invite-teacher-button";
 
 type TeachersPageProps = {
   params: Promise<{
@@ -29,7 +29,9 @@ export default async function TeachersPage({ params }: TeachersPageProps) {
           </p>
         </div>
 
-        {workspace.membership.role === "owner" && <Button>Invite Teacher</Button>}
+        {workspace.membership.role === "owner" &&  <InviteTeacherButton
+    instituteId={workspace.institute.id}
+  />}
       </div>
 
       <Card>
