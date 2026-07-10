@@ -6,15 +6,11 @@ type PendingInviteListProps = {
   invites: TeacherInviteDTO[];
 };
 
-export function PendingInviteList({
-  invites,
-}: PendingInviteListProps) {
+export function PendingInviteList({ invites }: PendingInviteListProps) {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-xl font-semibold">
-          Pending Invitations
-        </h2>
+        <h2 className="text-xl font-semibold">Pending Invitations</h2>
 
         <p className="text-sm text-muted-foreground">
           Invitations that have been sent but not been accepted yet.
@@ -23,9 +19,7 @@ export function PendingInviteList({
 
       {invites.length === 0 ? (
         <div className="rounded-lg border border-dashed py-12 text-center">
-          <p className="font-medium">
-            No pending invitations
-          </p>
+          <p className="font-medium">No pending invitations</p>
 
           <p className="mt-2 text-sm text-muted-foreground">
             Invite teachers to collaborate with your institute.
@@ -34,10 +28,7 @@ export function PendingInviteList({
       ) : (
         <div className="space-y-3">
           {invites.map((invite) => (
-            <PendingInviteCard
-              key={invite.id}
-              invite={invite}
-            />
+            <PendingInviteCard key={invite.id} invite={invite} />
           ))}
         </div>
       )}

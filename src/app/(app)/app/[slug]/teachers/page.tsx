@@ -29,9 +29,9 @@ export default async function TeachersPage({ params }: TeachersPageProps) {
           </p>
         </div>
 
-        {workspace.membership.role === "owner" &&  <InviteTeacherButton
-    instituteId={workspace.institute.id}
-  />}
+        {workspace.membership.role === "owner" && (
+          <InviteTeacherButton slug={workspace.institute.slug} />
+        )}
       </div>
 
       <Card>

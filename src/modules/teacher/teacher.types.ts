@@ -28,3 +28,19 @@ export type TeacherPageDTO = {
 export type InviteTeacherInput = {
   email: string;
 };
+
+export type TeacherInviteRecord = {
+  id: string;
+  email: string;
+  token: string;
+
+  status: "pending" | "accepted" | "expired" | "cancelled";
+
+  expiresAt: Date;
+  createdAt: Date;
+
+  invitedBy: {
+    id: string;
+    name: string;
+  };
+};

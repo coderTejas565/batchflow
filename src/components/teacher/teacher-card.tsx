@@ -8,9 +8,7 @@ type TeacherCardProps = {
   teacher: TeacherDTO;
 };
 
-export function TeacherCard({
-  teacher,
-}: TeacherCardProps) {
+export function TeacherCard({ teacher }: TeacherCardProps) {
   const initials = teacher.name
     .split(" ")
     .map((part) => part[0])
@@ -28,24 +26,17 @@ export function TeacherCard({
           </Avatar>
 
           <div className="space-y-1">
-            <h3 className="font-medium leading-none">
-              {teacher.name}
-            </h3>
+            <h3 className="font-medium leading-none">{teacher.name}</h3>
 
-            <p className="text-sm text-muted-foreground">
-              {teacher.email}
-            </p>
+            <p className="text-sm text-muted-foreground">{teacher.email}</p>
 
             <p className="text-xs text-muted-foreground">
-              Joined{" "}
-              {teacher.joinedAt.toLocaleDateString()}
+              Joined {teacher.joinedAt.toLocaleDateString()}
             </p>
           </div>
         </div>
 
-<Badge variant="secondary">
-  {teacher.role}
-</Badge>
+        <Badge variant="secondary">{teacher.role}</Badge>
       </CardContent>
     </Card>
   );

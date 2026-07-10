@@ -2,30 +2,20 @@
 
 import { requireAuth } from "@/lib/auth/session";
 import { AppError } from "@/lib/errors";
-import {
-  ok,
-  fail,
-  type Result,
-} from "@/lib/result";
+import { ok, fail, type Result } from "@/lib/result";
 
-import {
-  getTeacherPage,
-  inviteTeacher,
-} from "./teacher.service";
+import { getTeacherPage, inviteTeacher } from "./teacher.service";
 
-import type {
-  TeacherInviteDTO,
-  TeacherPageDTO,
-} from "./teacher.types";
+import type { TeacherInviteDTO, TeacherPageDTO } from "./teacher.types";
+
+import { getCurrentWorkspace } from "@/modules/workspace";
 
 type InviteTeacherActionInput = {
-  instituteId: string;
+  slug: string;
   email: string;
 };
 
-export async function getTeacherPageAction(
-  instituteId: string
-): Promise<Result<TeacherPageDTO>> {
+export async function getTeacherPageAction(instituteId: string): Promise<Result<TeacherPageDTO>> {
   try {
     await requireAuth();
 
@@ -39,23 +29,21 @@ export async function getTeacherPageAction(
 
     console.error("Get teachers failed:", error);
 
-    return fail(
-      "Failed to load teachers.",
-      "UNKNOWN"
-    );
+    return fail("Failed to load teachers.", "UNKNOWN");
   }
 }
 
 export async function inviteTeacherAction(
-  input: InviteTeacherActionInput
+  input: InviteTeacherActionInput,
 ): Promise<Result<TeacherInviteDTO>> {
   try {
-    const session = await requireAuth();
+    const workspace = await getCurrentWorkspace(input.slug);
 
     const invite = await inviteTeacher({
-      instituteId: input.instituteId,
+      instituteId: workspace.institute.id,
+      instituteName: workspace.institute.name,
       email: input.email,
-      invitedBy: session.user.id,
+      invitedBy: workspace.user.id,
     });
 
     return ok(invite);
@@ -66,9 +54,6 @@ export async function inviteTeacherAction(
 
     console.error("Invite teacher failed:", error);
 
-    return fail(
-      "Failed to invite teacher.",
-      "UNKNOWN"
-    );
+    return fail("Failed to invite teacher.", "UNKNOWN");
   }
 }

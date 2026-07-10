@@ -8,14 +8,9 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  inviteTeacherSchema,
-  type InviteTeacherInput,
-} from "@/modules/teacher/teacher.validation";
+import { inviteTeacherSchema, type InviteTeacherInput } from "@/modules/teacher/teacher.validation";
 
-import {
-  inviteTeacherAction,
-} from "@/modules/teacher/client";
+import { inviteTeacherAction } from "@/modules/teacher/client";
 
 import {
   Dialog,
@@ -38,16 +33,13 @@ import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/shared/submit-button";
 
 type InviteTeacherDialogProps = {
-  instituteId: string;
+  slug: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-export function InviteTeacherDialog({
-  instituteId,
-  open,
-  onOpenChange,
-}: InviteTeacherDialogProps) {
+export function InviteTeacherDialog({ 
+  slug, open, onOpenChange }: InviteTeacherDialogProps) {
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
@@ -62,7 +54,7 @@ export function InviteTeacherDialog({
   const onSubmit = (values: InviteTeacherInput) => {
     startTransition(async () => {
       const result = await inviteTeacherAction({
-        instituteId,
+        slug,
         email: values.email,
       });
 
@@ -82,27 +74,19 @@ export function InviteTeacherDialog({
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={onOpenChange}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            Invite Teacher
-          </DialogTitle>
+          <DialogTitle>Invite Teacher</DialogTitle>
 
-<DialogDescription>
-  Enter the teacher&apos;s email address. They&apos;ll
-  receive an invitation to join your institute.
-</DialogDescription>
+          <DialogDescription>
+            Enter the teacher&apos;s email address. They&apos;ll receive an invitation to join your
+            institute.
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="email"
@@ -111,11 +95,7 @@ export function InviteTeacherDialog({
                   <FormLabel>Email</FormLabel>
 
                   <FormControl>
-                    <Input
-                      placeholder="teacher@example.com"
-                      autoComplete="email"
-                      {...field}
-                    />
+                    <Input placeholder="teacher@example.com" autoComplete="email" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -123,10 +103,7 @@ export function InviteTeacherDialog({
               )}
             />
 
-            <SubmitButton
-              loading={isPending}
-              loadingText="Sending..."
-            >
+            <SubmitButton loading={isPending} loadingText="Sending...">
               Send Invitation
             </SubmitButton>
           </form>

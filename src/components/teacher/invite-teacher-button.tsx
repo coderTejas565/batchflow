@@ -8,12 +8,10 @@ import { Button } from "@/components/ui/button";
 import { InviteTeacherDialog } from "./invite-teacher-dialog";
 
 type InviteTeacherButtonProps = {
-  instituteId: string;
+  slug: string;
 };
 
-export function InviteTeacherButton({
-  instituteId,
-}: InviteTeacherButtonProps) {
+export function InviteTeacherButton({ slug }: InviteTeacherButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,11 +21,9 @@ export function InviteTeacherButton({
         Invite Teacher
       </Button>
 
-      <InviteTeacherDialog
-        instituteId={instituteId}
-        open={open}
-        onOpenChange={setOpen}
-      />
+      <InviteTeacherDialog 
+    slug = {slug}
+    open={open} onOpenChange={setOpen} />
     </>
   );
 }

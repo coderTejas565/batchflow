@@ -7,31 +7,23 @@ type PendingInviteCardProps = {
   invite: TeacherInviteDTO;
 };
 
-export function PendingInviteCard({
-  invite,
-}: PendingInviteCardProps) {
+export function PendingInviteCard({ invite }: PendingInviteCardProps) {
   return (
     <Card>
       <CardContent className="flex items-center justify-between py-5">
         <div className="space-y-1">
-          <h3 className="font-medium">
-            {invite.email}
-          </h3>
+          <h3 className="font-medium">{invite.email}</h3>
 
           <p className="text-sm text-muted-foreground">
-            Sent on{" "}
-            {invite.createdAt.toLocaleDateString()}
+            Sent on {invite.createdAt.toLocaleDateString()}
           </p>
 
           <p className="text-xs text-muted-foreground">
-            Expires on{" "}
-            {invite.expiresAt.toLocaleDateString()}
+            Expires on {invite.expiresAt.toLocaleDateString()}
           </p>
         </div>
 
-        <Badge variant="secondary">
-          Pending
-        </Badge>
+        <Badge variant="secondary">Pending</Badge>
       </CardContent>
     </Card>
   );
