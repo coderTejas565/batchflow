@@ -3,7 +3,7 @@ import { alias } from "drizzle-orm/pg-core";
 
 import { db } from "@/db";
 
-import { instituteMember, teacherInvite } from "@/db/schema/institute";
+import { institute, instituteMember, teacherInvite } from "@/db/schema/institute";
 
 import type { TeacherInviteRecord } from "./teacher.types";
 
@@ -32,6 +32,26 @@ type CreateInviteParams = {
 type FindTeacherByEmailParams = {
   instituteId: string;
   email: string;
+};
+
+type FindInviteByTokenParams = {
+  token: string;
+};
+
+type CreateTeacherMembershipParams = {
+  id: string;
+  instituteId: string;
+  userId: string;
+};
+
+type MarkInviteAcceptedParams = {
+  inviteId: string;
+  userId: string;
+};
+
+type FindMemberParams = {
+  instituteId: string;
+  userId: string;
 };
 
 async function findTeachers({ instituteId }: InstituteParams) {
@@ -144,12 +164,73 @@ async function findTeacherByEmail({ instituteId, email }: FindTeacherByEmailPara
   return teacher ?? null;
 }
 
+async function findInviteByToken({ token }: FindInviteByTokenParams) {
+  const [invite] = await db
+    .select({
+      id: teacherInvite.id,
+      token: teacherInvite.token,
+      email: teacherInvite.email,
+      status: teacherInvite.status,
+      expiresAt: teacherInvite.expiresAt,
+      acceptedAt: teacherInvite.acceptedAt,
+
+      institute: {
+        id: institute.id,
+        name: institute.name,
+        slug: institute.slug,
+      },
+    })
+    .from(teacherInvite)
+    .innerJoin(institute, eq(institute.id, teacherInvite.instituteId))
+    .where(eq(teacherInvite.token, token))
+    .limit(1);
+
+  return invite ?? null;
+}
+
+async function createTeacherMembership({ id, instituteId, userId }: CreateTeacherMembershipParams) {
+  await db.insert(instituteMember).values({
+    id,
+    instituteId,
+    userId,
+    role: "teacher",
+  });
+}
+
+async function markInviteAccepted({ inviteId, userId }: MarkInviteAcceptedParams) {
+  await db
+    .update(teacherInvite)
+    .set({
+      status: "accepted",
+      acceptedBy: userId,
+      acceptedAt: new Date(),
+    })
+    .where(eq(teacherInvite.id, inviteId));
+}
+
+async function findMember({ instituteId, userId }: FindMemberParams) {
+  const [member] = await db
+    .select({
+      id: instituteMember.id,
+      role: instituteMember.role,
+    })
+    .from(instituteMember)
+    .where(and(eq(instituteMember.instituteId, instituteId), eq(instituteMember.userId, userId)))
+    .limit(1);
+
+  return member ?? null;
+}
+
 export const teacherRepository = {
   findTeachers,
   findPendingInvites,
 
   findInviteByEmail,
   findTeacherByEmail,
+  findInviteByToken,
+  findMember,
 
   createInvite,
+  createTeacherMembership,
+  markInviteAccepted,
 };

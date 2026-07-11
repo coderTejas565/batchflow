@@ -44,3 +44,24 @@ export type TeacherInviteRecord = {
     name: string;
   };
 };
+
+export type TeacherInviteDetailsDTO = {
+  id: string;
+  token: string;
+  email: string;
+
+  status: "pending" | "accepted" | "expired" | "cancelled";
+
+  expiresAt: Date;
+  acceptedAt: Date | null;
+
+  institute: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+};
+
+export type AcceptTeacherInviteDTO = {
+  instituteSlug: string;
+};

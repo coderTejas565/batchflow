@@ -38,8 +38,7 @@ type InviteTeacherDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function InviteTeacherDialog({ 
-  slug, open, onOpenChange }: InviteTeacherDialogProps) {
+export function InviteTeacherDialog({ slug, open, onOpenChange }: InviteTeacherDialogProps) {
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();

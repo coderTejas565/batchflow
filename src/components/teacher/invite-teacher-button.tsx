@@ -21,9 +21,7 @@ export function InviteTeacherButton({ slug }: InviteTeacherButtonProps) {
         Invite Teacher
       </Button>
 
-      <InviteTeacherDialog 
-    slug = {slug}
-    open={open} onOpenChange={setOpen} />
+      <InviteTeacherDialog slug={slug} open={open} onOpenChange={setOpen} />
     </>
   );
 }
