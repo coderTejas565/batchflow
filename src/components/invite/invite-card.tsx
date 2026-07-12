@@ -1,19 +1,22 @@
-import { Card, CardContent, CardHeader, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 import { AcceptInviteButton } from "./accept-invite-button";
 
 import type { TeacherInviteDetailsDTO } from "@/modules/teacher";
 
+import Link from "next/link";
+
 type InviteCardProps = {
   invite: TeacherInviteDetailsDTO;
+  isAuthenticated: boolean;
 };
 
-export function InviteCard({ invite }: InviteCardProps) {
+export function InviteCard({ invite,isAuthenticated }: InviteCardProps) {
   return (
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader className="space-y-2">
-        <AcceptInviteButton token={invite.token} />
+        <CardTitle>Teacher Invitation</CardTitle>
 
         <CardDescription>
           You&apos;re invited to join <span className="font-medium">{invite.institute.name}</span>{" "}
@@ -39,7 +42,13 @@ export function InviteCard({ invite }: InviteCardProps) {
           </div>
         </div>
 
-        <Button className="w-full">Accept Invitation</Button>
+        {isAuthenticated ? (
+          <AcceptInviteButton token={invite.token} />
+        ) : (
+          <Button asChild className="w-full">
+            <Link href={`/login?callback=/invite/${invite.token}`}>Login to Accept</Link>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

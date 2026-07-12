@@ -1,3 +1,4 @@
+import { resend } from "./resend";
 import { teacherInviteTemplate } from "./email.templates";
 
 type SendTeacherInviteEmailParams = {
@@ -16,10 +17,22 @@ export async function sendTeacherInviteEmail({
     inviteLink,
   });
 
-  console.log("====================================");
-  console.log("Teacher Invite Email");
-  console.log("To:", to);
-  console.log("Subject:", email.subject);
-  console.log(email.text);
-  console.log("====================================");
+  try {
+    const { error } = await resend.emails.send({
+      from: "BatchFlow <onboarding@resend.dev>",
+      to,
+      subject: email.subject,
+      text: email.text,
+      html: email.html,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  } catch (error) {
+    console.error(
+      "Failed to send teacher invitation email:",
+      error,
+    );
+  }
 }

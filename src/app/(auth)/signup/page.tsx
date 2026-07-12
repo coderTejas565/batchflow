@@ -3,7 +3,16 @@ import { AuthFooter } from "@/components/features/auth/auth-footer";
 import { AuthHeader } from "@/components/features/auth/auth-header";
 import { SignupForm } from "@/components/features/auth/signup-form";
 
-export default function SignupPage() {
+type SignupPageProps = {
+  searchParams: Promise<{
+    callback?: string;
+  }>;
+};
+
+export default async function SignupPage({
+  searchParams,
+}: SignupPageProps) {
+  const { callback } = await searchParams;
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
       <AuthCard>
@@ -14,7 +23,17 @@ export default function SignupPage() {
 
         <SignupForm />
 
-        <AuthFooter text="Already have an account?" linkText="Sign In" href="/login" />
+        <AuthFooter
+      text="Already have an account?"
+      linkText="Sign in"
+      href={
+        callback
+          ? `/login?callback=${encodeURIComponent(
+              callback,
+            )}`
+          : "/login"
+      }
+    />
       </AuthCard>
     </main>
   );
