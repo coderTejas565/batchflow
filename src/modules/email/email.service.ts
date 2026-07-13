@@ -30,9 +30,6 @@ export async function sendTeacherInviteEmail({
       throw new Error(error.message);
     }
   } catch (error) {
-    console.error(
-      "Failed to send teacher invitation email:",
-      error,
-    );
+    console.error("Failed to send teacher invitation email:", error);
   }
 }

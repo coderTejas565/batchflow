@@ -17,8 +17,7 @@ export function LoginForm() {
 
   const searchParams = useSearchParams();
 
-const callback =
-  searchParams.get("callback") ?? "/app";
+  const callback = searchParams.get("callback") ?? "/app";
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),

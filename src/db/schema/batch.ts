@@ -1,19 +1,9 @@
-import {
-  pgTable,
-  pgEnum,
-  text,
-  timestamp,
-  index,
-} from "drizzle-orm/pg-core";
+import { pgTable, pgEnum, text, timestamp, index } from "drizzle-orm/pg-core";
 
 import { institute } from "./institute";
 import { user } from "./auth";
 
-export const batchStatusEnum = pgEnum("batch_status", [
-  "active",
-  "completed",
-  "archived",
-]);
+export const batchStatusEnum = pgEnum("batch_status", ["active", "completed", "archived"]);
 
 export const batch = pgTable(
   "batch",
@@ -32,13 +22,17 @@ export const batch = pgTable(
         onDelete: "restrict",
       }),
 
+    createdBy: text("created_by")
+      .notNull()
+      .references(() => user.id, {
+        onDelete: "restrict",
+      }),
+
     name: text("name").notNull(),
 
     description: text("description"),
 
-    status: batchStatusEnum("status")
-      .default("active")
-      .notNull(),
+    status: batchStatusEnum("status").default("active").notNull(),
 
     startDate: timestamp("start_date", {
       withTimezone: true,
@@ -65,6 +59,8 @@ export const batch = pgTable(
     index("batch_institute_idx").on(table.instituteId),
 
     index("batch_teacher_idx").on(table.teacherId),
+
+    index("batch_created_by_idx").on(table.createdBy),
 
     index("batch_status_idx").on(table.status),
   ],

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,8 +16,7 @@ export function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const callback =
-    searchParams.get("callback") ?? "/app";
+  const callback = searchParams.get("callback") ?? "/app";
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +47,7 @@ export function SignupForm() {
       return;
     }
 
-        router.push(callback);
+    router.push(callback);
     router.refresh();
   }
 

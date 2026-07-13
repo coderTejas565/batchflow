@@ -12,7 +12,7 @@ type InviteCardProps = {
   isAuthenticated: boolean;
 };
 
-export function InviteCard({ invite,isAuthenticated }: InviteCardProps) {
+export function InviteCard({ invite, isAuthenticated }: InviteCardProps) {
   return (
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader className="space-y-2">

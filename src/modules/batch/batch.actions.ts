@@ -5,24 +5,16 @@ import { fail, ok, type Result } from "@/lib/result";
 
 import { getCurrentWorkspace } from "@/modules/workspace";
 
-import {
-  createBatch,
-  getBatchPage,
-} from "./batch.service";
+import { createBatch, getBatchPage } from "./batch.service";
 
-import type {
-  BatchDTO,
-  BatchPageDTO,
-  CreateBatchInput,
-} from "./batch.types";
+import type { BatchDTO, BatchPageDTO, CreateBatchFormValues  } from "./batch.types";
 
-type CreateBatchActionInput = CreateBatchInput & {
+type CreateBatchActionInput = CreateBatchFormValues & {
   slug: string;
 };
 
-export async function getBatchPageAction(
-  instituteId: string,
-): Promise<Result<BatchPageDTO>> {
+
+export async function getBatchPageAction(instituteId: string): Promise<Result<BatchPageDTO>> {
   try {
     const data = await getBatchPage(instituteId);
 
@@ -34,35 +26,36 @@ export async function getBatchPageAction(
 
     console.error("Get batches failed:", error);
 
-    return fail(
-      "Failed to load batches.",
-      "UNKNOWN",
-    );
+    return fail("Failed to load batches.", "UNKNOWN");
   }
 }
 
-export async function createBatchAction(
-  input: CreateBatchActionInput,
-): Promise<Result<BatchDTO>> {
+export async function createBatchAction(input: CreateBatchActionInput): Promise<Result<BatchDTO>> {
   try {
-    const workspace =
-      await getCurrentWorkspace(input.slug);
+    const workspace = await getCurrentWorkspace(input.slug);
 
     if (workspace.membership.role !== "owner") {
-      throw new UnauthorizedError(
-        "Only institute owners can create batches.",
-      );
+      throw new UnauthorizedError("Only institute owners can create batches.");
     }
 
-    const batch = await createBatch({
-      instituteId: workspace.institute.id,
+const batch = await createBatch({
+  instituteId: workspace.institute.id,
+  createdBy: workspace.user.id,
 
-      name: input.name,
-      description: input.description,
-      teacherId: input.teacherId,
-      startDate: input.startDate,
-      endDate: input.endDate,
-    });
+  name: input.name,
+
+  description: input.description ?? null,
+
+  teacherId: input.teacherId,
+
+  startDate: input.startDate
+    ? new Date(input.startDate)
+    : null,
+
+  endDate: input.endDate
+    ? new Date(input.endDate)
+    : null,
+});
 
     return ok(batch);
   } catch (error) {
@@ -72,9 +65,6 @@ export async function createBatchAction(
 
     console.error("Create batch failed:", error);
 
-    return fail(
-      "Failed to create batch.",
-      "UNKNOWN",
-    );
+    return fail("Failed to create batch.", "UNKNOWN");
   }
 }

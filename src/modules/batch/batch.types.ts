@@ -1,9 +1,12 @@
+export type BatchStatus = "active" | "completed" | "archived";
+
 export type BatchDTO = {
   id: string;
+
   name: string;
   description: string | null;
 
-  status: "active" | "completed" | "archived";
+  status: BatchStatus;
 
   startDate: Date | null;
   endDate: Date | null;
@@ -18,23 +21,28 @@ export type BatchDTO = {
   createdAt: Date;
 };
 
-
 export type CreateBatchInput = {
   name: string;
-  description?: string;
+  description?: string | null;
+
   teacherId: string;
-  startDate?: Date;
-  endDate?: Date;
+
+  startDate?: Date | null;
+  endDate?: Date | null;
 };
 
 export type UpdateBatchInput = {
   batchId: string;
+
   name: string;
-  description?: string;
+  description?: string | null;
+
   teacherId: string;
-  status: "active" | "completed" | "archived";
-  startDate?: Date;
-  endDate?: Date;
+
+  status: BatchStatus;
+
+  startDate?: Date | null;
+  endDate?: Date | null;
 };
 
 export type TeacherOptionDTO = {
@@ -46,4 +54,12 @@ export type TeacherOptionDTO = {
 export type BatchPageDTO = {
   batches: BatchDTO[];
   teachers: TeacherOptionDTO[];
+};
+
+export type CreateBatchFormValues = {
+  name: string;
+  description?: string;
+  teacherId: string;
+  startDate?: string;
+  endDate?: string;
 };

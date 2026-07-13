@@ -3,10 +3,7 @@ type TeacherInviteTemplateParams = {
   inviteLink: string;
 };
 
-export function teacherInviteTemplate({
-  instituteName,
-  inviteLink,
-}: TeacherInviteTemplateParams) {
+export function teacherInviteTemplate({ instituteName, inviteLink }: TeacherInviteTemplateParams) {
   const subject = `You're invited to join ${instituteName}`;
 
   const text = `

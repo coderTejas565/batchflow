@@ -54,37 +54,38 @@ export const instituteMemberRelations = relations(instituteMember, ({ one }) => 
   }),
 }));
 
-export const teacherInviteRelations = relations(
-  teacherInvite,
-  ({ one }) => ({
-    institute: one(institute, {
-      fields: [teacherInvite.instituteId],
-      references: [institute.id],
-    }),
+export const teacherInviteRelations = relations(teacherInvite, ({ one }) => ({
+  institute: one(institute, {
+    fields: [teacherInvite.instituteId],
+    references: [institute.id],
+  }),
 
-    inviter: one(user, {
-      fields: [teacherInvite.invitedBy],
-      references: [user.id],
-    }),
+  inviter: one(user, {
+    fields: [teacherInvite.invitedBy],
+    references: [user.id],
+  }),
 
-    acceptedByUser: one(user, {
-      fields: [teacherInvite.acceptedBy],
-      references: [user.id],
-    }),
-  })
-);
+  acceptedByUser: one(user, {
+    fields: [teacherInvite.acceptedBy],
+    references: [user.id],
+  }),
+}));
 
-export const batchRelations = relations(
-  batch,
-  ({ one }) => ({
-    institute: one(institute, {
-      fields: [batch.instituteId],
-      references: [institute.id],
-    }),
+export const batchRelations = relations(batch, ({ one }) => ({
+  teacher: one(user, {
+    relationName: "batchTeacher",
+    fields: [batch.teacherId],
+    references: [user.id],
+  }),
 
-    teacher: one(user, {
-      fields: [batch.teacherId],
-      references: [user.id],
-    }),
-  })
-);
+  creator: one(user, {
+    relationName: "batchCreator",
+    fields: [batch.createdBy],
+    references: [user.id],
+  }),
+
+  institute: one(institute, {
+    fields: [batch.instituteId],
+    references: [institute.id],
+  }),
+}));

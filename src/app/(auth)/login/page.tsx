@@ -9,8 +9,7 @@ type LoginPageProps = {
   }>;
 };
 
-
-export default async function LoginPage({searchParams,}: LoginPageProps) {
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { callback } = await searchParams;
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
@@ -23,16 +22,10 @@ export default async function LoginPage({searchParams,}: LoginPageProps) {
         <LoginForm />
 
         <AuthFooter
-      text="Don't have an account?"
-      linkText="Create one"
-      href={
-        callback
-          ? `/signup?callback=${encodeURIComponent(
-              callback,
-            )}`
-          : "/signup"
-      }
-    />
+          text="Don't have an account?"
+          linkText="Create one"
+          href={callback ? `/signup?callback=${encodeURIComponent(callback)}` : "/signup"}
+        />
       </AuthCard>
     </main>
   );

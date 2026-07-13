@@ -14,27 +14,17 @@ export const createBatchSchema = z.object({
     .optional()
     .or(z.literal("")),
 
-  teacherId: z
-    .string()
-    .min(1, "Please select a teacher."),
+  teacherId: z.string().min(1, "Please select a teacher."),
 
-  startDate: z.date().optional(),
+  startDate: z.string().optional(),
 
-  endDate: z.date().optional(),
+  endDate: z.string().optional(),
 });
 
 export const updateBatchSchema = createBatchSchema.extend({
-  status: z.enum([
-    "active",
-    "completed",
-    "archived",
-  ]),
+  status: z.enum(["active", "completed", "archived"]),
 });
 
-export type CreateBatchInput = z.infer<
-  typeof createBatchSchema
->;
+export type CreateBatchInput = z.infer<typeof createBatchSchema>;
 
-export type UpdateBatchInput = z.infer<
-  typeof updateBatchSchema
->;
+export type UpdateBatchInput = z.infer<typeof updateBatchSchema>;
