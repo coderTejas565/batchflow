@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 
 import { batchRepository } from "./batch.repository";
 
-import type { BatchDTO, BatchPageDTO } from "./batch.types";
+import type { BatchDTO, BatchPageDTO, BatchDetailsDTO } from "./batch.types";
 
 import { createBatchSchema } from "./batch.validation";
 
@@ -88,4 +88,23 @@ export async function createBatch({
     ? new Date(data.endDate)
     : null,
 });
+}
+
+export async function getBatchDetails(
+  instituteId: string,
+  batchId: string,
+): Promise<BatchDetailsDTO> {
+  const batch =
+    await batchRepository.findBatchDetails({
+      instituteId,
+      batchId,
+    });
+
+  if (!batch) {
+    throw new NotFoundError(
+      "Batch not found.",
+    );
+  }
+
+  return batch;
 }

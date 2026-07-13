@@ -63,3 +63,28 @@ export type CreateBatchFormValues = {
   startDate?: string;
   endDate?: string;
 };
+
+export type BatchDetailsDTO = {
+  id: string;
+
+  name: string;
+
+  description: string | null;
+
+  status: "active" | "completed" | "archived";
+
+  startDate: Date | null;
+
+  endDate: Date | null;
+
+  createdAt: Date;
+
+  teacher: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+  };
+
+  studentCount: number;
+};

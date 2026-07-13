@@ -37,6 +37,11 @@ type FindTeacherParams = {
   teacherId: string;
 };
 
+type FindBatchDetailsParams = {
+  instituteId: string;
+  batchId: string;
+};
+
 const batchSelect = {
   id: batch.id,
   name: batch.name,
@@ -146,9 +151,39 @@ async function createBatch({
   return createdBatch;
 }
 
+async function findBatchDetails({
+  instituteId,
+  batchId,
+}: FindBatchDetailsParams) {
+  const [result] = await db
+    .select(batchSelect)
+    .from(batch)
+    .innerJoin(
+      user,
+      eq(user.id, batch.teacherId)
+    )
+    .where(
+      and(
+        eq(batch.id, batchId),
+        eq(batch.instituteId, instituteId)
+      )
+    )
+    .limit(1);
+
+  if (!result) {
+    return null;
+  }
+
+  return {
+    ...result,
+    studentCount: 0,
+  };
+}
+
 export const batchRepository = {
   findBatches,
   findTeachers,
+  findBatchDetails,
 
   findInstituteTeacher,
   batchExists,

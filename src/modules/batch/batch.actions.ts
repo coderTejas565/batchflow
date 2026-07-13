@@ -5,12 +5,26 @@ import { fail, ok, type Result } from "@/lib/result";
 
 import { getCurrentWorkspace } from "@/modules/workspace";
 
-import { createBatch, getBatchPage } from "./batch.service";
+import {
+  createBatch,
+  getBatchPage,
+  getBatchDetails,
+} from "./batch.service";
 
-import type { BatchDTO, BatchPageDTO, CreateBatchFormValues  } from "./batch.types";
+import type {
+  BatchDTO,
+  BatchPageDTO,
+  BatchDetailsDTO,
+  CreateBatchFormValues,
+} from "./batch.types";
 
 type CreateBatchActionInput = CreateBatchFormValues & {
   slug: string;
+};
+
+type GetBatchDetailsActionParams = {
+  slug: string;
+  batchId: string;
 };
 
 
@@ -66,5 +80,32 @@ const batch = await createBatch({
     console.error("Create batch failed:", error);
 
     return fail("Failed to create batch.", "UNKNOWN");
+  }
+}
+
+export async function getBatchDetailsAction({
+  slug,
+  batchId,
+}: GetBatchDetailsActionParams): Promise<Result<BatchDetailsDTO>> {
+  try {
+    const workspace = await getCurrentWorkspace(slug);
+
+    const batch = await getBatchDetails(
+      workspace.institute.id,
+      batchId,
+    );
+
+    return ok(batch);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return fail(error.message, error.code);
+    }
+
+    console.error("Get batch details failed:", error);
+
+    return fail(
+      "Failed to load batch.",
+      "UNKNOWN",
+    );
   }
 }

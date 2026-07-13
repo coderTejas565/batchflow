@@ -1,6 +1,10 @@
-export { getBatchPage, createBatch } from "./batch.service";
+export { getBatchPage, createBatch, getBatchDetails } from "./batch.service";
 
-export { getBatchPageAction, createBatchAction } from "./batch.actions";
+export {
+  getBatchPageAction,
+  createBatchAction,
+  getBatchDetailsAction,
+} from "./batch.actions";
 
 export type {
   BatchDTO,
@@ -8,5 +12,6 @@ export type {
   TeacherOptionDTO,
   CreateBatchInput,
   UpdateBatchInput,
-  CreateBatchFormValues
+  CreateBatchFormValues,
+  BatchDetailsDTO
 } from "./batch.types";
