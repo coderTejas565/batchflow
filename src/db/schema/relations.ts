@@ -2,6 +2,8 @@ import { relations } from "drizzle-orm";
 
 import { user, session, account } from "./auth";
 
+import { batch } from "./batch";
+
 import { institute, instituteMember, teacherInvite } from "./institute";
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -11,6 +13,8 @@ export const userRelations = relations(user, ({ many }) => ({
   instituteMemberships: many(instituteMember),
 
   teacherInvitesSent: many(teacherInvite),
+
+  teachingBatches: many(batch),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -34,6 +38,8 @@ export const instituteRelations = relations(institute, ({ one, many }) => ({
   }),
 
   members: many(instituteMember),
+
+  batches: many(batch),
 }));
 
 export const instituteMemberRelations = relations(instituteMember, ({ one }) => ({
@@ -48,14 +54,37 @@ export const instituteMemberRelations = relations(instituteMember, ({ one }) => 
   }),
 }));
 
-export const teacherInviteRelations = relations(teacherInvite, ({ one }) => ({
-  institute: one(institute, {
-    fields: [teacherInvite.instituteId],
-    references: [institute.id],
-  }),
+export const teacherInviteRelations = relations(
+  teacherInvite,
+  ({ one }) => ({
+    institute: one(institute, {
+      fields: [teacherInvite.instituteId],
+      references: [institute.id],
+    }),
 
-  inviter: one(user, {
-    fields: [teacherInvite.invitedBy],
-    references: [user.id],
-  }),
-}));
+    inviter: one(user, {
+      fields: [teacherInvite.invitedBy],
+      references: [user.id],
+    }),
+
+    acceptedByUser: one(user, {
+      fields: [teacherInvite.acceptedBy],
+      references: [user.id],
+    }),
+  })
+);
+
+export const batchRelations = relations(
+  batch,
+  ({ one }) => ({
+    institute: one(institute, {
+      fields: [batch.instituteId],
+      references: [institute.id],
+    }),
+
+    teacher: one(user, {
+      fields: [batch.teacherId],
+      references: [user.id],
+    }),
+  })
+);
