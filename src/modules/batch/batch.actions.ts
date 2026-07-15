@@ -5,9 +5,20 @@ import { fail, ok, type Result } from "@/lib/result";
 
 import { getCurrentWorkspace } from "@/modules/workspace";
 
-import { createBatch, getBatchPage, getBatchDetails } from "./batch.service";
+import {
+  createBatch,
+  getBatchPage,
+  getBatchDetails,
+  updateBatch,
+} from "./batch.service";
 
-import type { BatchDTO, BatchPageDTO, BatchDetailsDTO, CreateBatchFormValues } from "./batch.types";
+import type {
+  BatchDTO,
+  BatchPageDTO,
+  BatchDetailsDTO,
+  CreateBatchFormValues,
+  UpdateBatchFormValues,
+} from "./batch.types";
 
 type CreateBatchActionInput = CreateBatchFormValues & {
   slug: string;
@@ -17,6 +28,12 @@ type GetBatchDetailsActionParams = {
   slug: string;
   batchId: string;
 };
+
+type UpdateBatchActionInput =
+  UpdateBatchFormValues & {
+    slug: string;
+    batchId: string;
+  };
 
 export async function getBatchPageAction(instituteId: string): Promise<Result<BatchPageDTO>> {
   try {
@@ -87,5 +104,56 @@ export async function getBatchDetailsAction({
     console.error("Get batch details failed:", error);
 
     return fail("Failed to load batch.", "UNKNOWN");
+  }
+}
+
+export async function updateBatchAction(
+  input: UpdateBatchActionInput,
+): Promise<Result<BatchDTO>> {
+  try {
+    const workspace = await getCurrentWorkspace(
+      input.slug,
+    );
+
+    if (workspace.membership.role !== "owner") {
+      throw new UnauthorizedError(
+        "Only institute owners can update batches.",
+      );
+    }
+
+    const batch = await updateBatch({
+      instituteId: workspace.institute.id,
+      batchId: input.batchId,
+
+      name: input.name,
+      description: input.description ?? null,
+
+      teacherId: input.teacherId,
+      status: input.status,
+
+      startDate: input.startDate
+        ? new Date(input.startDate)
+        : null,
+
+      endDate: input.endDate
+        ? new Date(input.endDate)
+        : null,
+    });
+
+    return ok(batch);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return fail(error.message, error.code);
+    }
+
+    console.error(
+      "Update batch failed:",
+      error,
+    );
+
+    return fail(
+      "Failed to update batch.",
+      "UNKNOWN",
+    );
   }
 }

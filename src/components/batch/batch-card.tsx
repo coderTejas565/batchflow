@@ -25,6 +25,7 @@ type BatchCardProps = {
 };
 
 export function BatchCard({ slug, batch }: BatchCardProps) {
+    const batchHref = `/app/${slug}/batches/${batch.id}`;
   return (
     <Card>
       <CardHeader className="space-y-3">
@@ -68,13 +69,17 @@ export function BatchCard({ slug, batch }: BatchCardProps) {
       </CardContent>
 
       <CardFooter className="flex justify-end gap-2">
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/app/${slug}/batches/${batch.id}`}>View</Link>
-        </Button>
+       <Button asChild variant="outline" size="sm">
+  <Link href={batchHref}>View</Link>
+</Button>
 
-        <Button size="sm" disabled>
-          Coming Soon
-        </Button>
+        <Button
+  size="sm"
+  disabled
+  title="Editing will be available soon"
+>
+  Edit
+</Button>
       </CardFooter>
     </Card>
   );

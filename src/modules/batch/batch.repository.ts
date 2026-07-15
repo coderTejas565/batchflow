@@ -42,6 +42,21 @@ type FindBatchDetailsParams = {
   batchId: string;
 };
 
+type UpdateBatchParams = {
+  batchId: string;
+  instituteId: string;
+
+  teacherId: string;
+
+  name: string;
+  description: string | null;
+
+  startDate: Date | null;
+  endDate: Date | null;
+
+  status: "active" | "completed" | "archived";
+};
+
 const batchSelect = {
   id: batch.id,
   name: batch.name,
@@ -168,6 +183,49 @@ async function findBatchDetails({ instituteId, batchId }: FindBatchDetailsParams
   };
 }
 
+async function updateBatch({
+  batchId,
+  instituteId,
+  teacherId,
+  name,
+  description,
+  startDate,
+  endDate,
+  status,
+}: UpdateBatchParams): Promise<BatchDTO> {
+  await db
+    .update(batch)
+    .set({
+      teacherId,
+      name,
+      description,
+      startDate,
+      endDate,
+      status,
+    })
+    .where(
+      and(
+        eq(batch.id, batchId),
+        eq(batch.instituteId, instituteId),
+      ),
+    );
+
+  const [updatedBatch] = await db
+    .select(batchSelect)
+    .from(batch)
+    .innerJoin(user, eq(user.id, batch.teacherId))
+    .where(eq(batch.id, batchId))
+    .limit(1);
+
+  if (!updatedBatch) {
+    throw new Error(
+      "Batch was updated but could not be retrieved.",
+    );
+  }
+
+  return updatedBatch;
+}
+
 export const batchRepository = {
   findBatches,
   findTeachers,
@@ -177,4 +235,5 @@ export const batchRepository = {
   batchExists,
 
   createBatch,
+  updateBatch
 };

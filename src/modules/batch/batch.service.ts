@@ -2,14 +2,25 @@ import { randomUUID } from "crypto";
 
 import { batchRepository } from "./batch.repository";
 
-import type { BatchDTO, BatchPageDTO, BatchDetailsDTO, CreateBatchInput } from "./batch.types";
+import type {
+  BatchDTO,
+  BatchPageDTO,
+  BatchDetailsDTO,
+  CreateBatchInput,
+  UpdateBatchInput,
+} from "./batch.types";
 
-import { createBatchServiceSchema } from "./batch.service-schema";
+import {
+  createBatchServiceSchema,
+  updateBatchServiceSchema,
+} from "./batch.service-schema";
 
 import { parseOrThrow } from "@/lib/validate";
 
-import { NotFoundError, ValidationError } from "@/lib/errors";
-
+import {
+  NotFoundError,
+  ValidationError,
+} from "@/lib/errors";
 export async function getBatchPage(instituteId: string): Promise<BatchPageDTO> {
   const [batches, teachers] = await Promise.all([
     batchRepository.findBatches({
@@ -67,6 +78,69 @@ export async function createBatch({
   });
 }
 
+export async function updateBatch({
+  instituteId,
+  batchId,
+  ...input
+}: {
+  instituteId: string;
+  batchId: string;
+} & UpdateBatchInput): Promise<BatchDTO> {
+  const data = parseOrThrow(
+    updateBatchServiceSchema,
+    input,
+  );
+
+  if (
+    data.startDate &&
+    data.endDate &&
+    data.endDate < data.startDate
+  ) {
+    throw new ValidationError(
+      "End date must be after the start date.",
+    );
+  }
+
+  const existingBatch =
+    await batchRepository.batchExists({
+      batchId,
+      instituteId,
+    });
+
+  if (!existingBatch) {
+    throw new NotFoundError(
+      "Batch not found.",
+    );
+  }
+
+  const teacher =
+    await batchRepository.findInstituteTeacher({
+      instituteId,
+      teacherId: data.teacherId,
+    });
+
+  if (!teacher) {
+    throw new NotFoundError(
+      "Teacher not found.",
+    );
+  }
+
+  return batchRepository.updateBatch({
+    batchId,
+    instituteId,
+
+    teacherId: data.teacherId,
+
+    name: data.name,
+    description: data.description ?? null,
+
+    startDate: data.startDate ?? null,
+    endDate: data.endDate ?? null,
+
+    status: data.status,
+  });
+}
+
 export async function getBatchDetails(
   instituteId: string,
   batchId: string,
@@ -82,3 +156,5 @@ export async function getBatchDetails(
 
   return batch;
 }
+
+

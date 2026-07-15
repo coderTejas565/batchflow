@@ -73,6 +73,15 @@ export type CreateBatchFormValues = {
   endDate?: string;
 };
 
+export type UpdateBatchFormValues = {
+  name: string;
+  description: string;
+  teacherId: string;
+  status: "active" | "completed" | "archived";
+  startDate: string;
+  endDate: string;
+};
+
 //
 // Service Types
 //
@@ -95,10 +104,10 @@ export type UpdateBatchInput = {
 
   teacherId: string;
 
-  status: BatchStatus;
-
   startDate?: Date | null;
   endDate?: Date | null;
+
+  status: "active" | "completed" | "archived";
 };
 
 // for loader
