@@ -38,7 +38,6 @@ export async function createBatchAction(input: CreateBatchActionInput): Promise<
   try {
     const workspace = await getCurrentWorkspace(input.slug);
 
-
     if (workspace.membership.role !== "owner") {
       throw new UnauthorizedError("Only institute owners can create batches.");
     }
@@ -57,7 +56,6 @@ export async function createBatchAction(input: CreateBatchActionInput): Promise<
 
       endDate: input.endDate ? new Date(input.endDate) : null,
     });
-
 
     return ok(batch);
   } catch (error) {

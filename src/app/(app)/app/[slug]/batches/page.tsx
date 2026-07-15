@@ -13,9 +13,9 @@ type BatchesPageProps = {
 export default async function BatchesPage({ params }: BatchesPageProps) {
   const { slug } = await params;
 
-  const workspace = await getCurrentWorkspace(slug);
+  const workspaceContext = await getCurrentWorkspace(slug);
 
-  const data = await getBatchPage(workspace.institute.id);
+  const { batches, teachers } = await getBatchPage(workspaceContext.institute.id);
 
   return (
     <div className="space-y-6">
@@ -26,12 +26,12 @@ export default async function BatchesPage({ params }: BatchesPageProps) {
           <p className="text-muted-foreground">Manage institute batches</p>
         </div>
 
-        {workspace.membership.role === "owner" && (
-          <CreateBatchButton slug={slug} teachers={data.teachers} />
+        {workspaceContext.membership.role === "owner" && (
+          <CreateBatchButton slug={slug} teachers={teachers} />
         )}
       </div>
 
-      <BatchList batches={data.batches} />
+      <BatchList slug={slug} batches={batches} />
     </div>
   );
 }

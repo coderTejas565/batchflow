@@ -2,6 +2,8 @@
 
 import { format } from "date-fns";
 
+import { BatchStatusBadge } from "./batch-status-badge";
+
 import {
   Card,
   CardContent,
@@ -11,16 +13,18 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 
 import type { BatchDTO } from "@/modules/batch";
 
 type BatchCardProps = {
+  slug: string;
   batch: BatchDTO;
 };
 
-export function BatchCard({ batch }: BatchCardProps) {
+export function BatchCard({ slug, batch }: BatchCardProps) {
   return (
     <Card>
       <CardHeader className="space-y-3">
@@ -33,7 +37,7 @@ export function BatchCard({ batch }: BatchCardProps) {
             )}
           </div>
 
-          <Badge variant="secondary">{batch.status}</Badge>
+          <BatchStatusBadge status={batch.status} />
         </div>
       </CardHeader>
 
@@ -64,11 +68,13 @@ export function BatchCard({ batch }: BatchCardProps) {
       </CardContent>
 
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline" size="sm">
-          View
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/app/${slug}/batches/${batch.id}`}>View</Link>
         </Button>
 
-        <Button size="sm">Edit</Button>
+        <Button size="sm" disabled>
+          Coming Soon
+        </Button>
       </CardFooter>
     </Card>
   );

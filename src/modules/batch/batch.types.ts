@@ -100,3 +100,15 @@ export type UpdateBatchInput = {
   startDate?: Date | null;
   endDate?: Date | null;
 };
+
+// for loader
+export type BatchPageData = {
+  batches: BatchDTO[];
+  teachers: TeacherOptionDTO[];
+
+  permissions: {
+    canCreate: boolean;
+    canEdit: boolean;
+    canArchive: boolean;
+  };
+};

@@ -125,7 +125,6 @@ async function createBatch({
   startDate,
   endDate,
 }: CreateBatchParams): Promise<BatchDTO> {
-  
   await db.insert(batch).values({
     id,
     instituteId,
@@ -143,7 +142,6 @@ async function createBatch({
     .innerJoin(user, eq(user.id, batch.teacherId))
     .where(eq(batch.id, id))
     .limit(1);
-
 
   if (!createdBatch) {
     throw new Error("Batch was created but could not be retrieved.");
