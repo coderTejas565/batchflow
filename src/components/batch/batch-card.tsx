@@ -49,18 +49,16 @@ export function BatchCard({ batch }: BatchCardProps) {
             <p className="text-sm font-medium">Starts</p>
 
             <p className="text-sm text-muted-foreground">
-              {batch.startDate
-  ? format(batch.startDate, "dd MMM yyyy")
-  : "Not set"}
+              {batch.startDate ? format(batch.startDate, "dd MMM yyyy") : "Not set"}
             </p>
           </div>
 
           <div>
             <p className="text-sm font-medium">Ends</p>
 
-            <p className="text-sm text-muted-foreground">{batch.endDate
-  ? format(batch.endDate, "dd MMM yyyy")
-  : "Not set"}</p>
+            <p className="text-sm text-muted-foreground">
+              {batch.endDate ? format(batch.endDate, "dd MMM yyyy") : "Not set"}
+            </p>
           </div>
         </div>
       </CardContent>

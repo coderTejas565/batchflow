@@ -2,18 +2,9 @@
 
 import type { Control } from "react-hook-form";
 
-import type {
-  CreateBatchFormValues,
-  TeacherOptionDTO,
-} from "@/modules/batch";
+import type { CreateBatchFormValues, TeacherOptionDTO } from "@/modules/batch";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,10 +22,7 @@ type BatchFieldsProps = {
   teachers: TeacherOptionDTO[];
 };
 
-export function BatchFields({
-  control,
-  teachers,
-}: BatchFieldsProps) {
+export function BatchFields({ control, teachers }: BatchFieldsProps) {
   return (
     <>
       <FormField
@@ -45,10 +33,7 @@ export function BatchFields({
             <FormLabel>Batch Name</FormLabel>
 
             <FormControl>
-              <Input
-                placeholder="Class 10 - A"
-                {...field}
-              />
+              <Input placeholder="Class 10 - A" {...field} />
             </FormControl>
 
             <FormMessage />
@@ -71,9 +56,7 @@ export function BatchFields({
               />
             </FormControl>
 
-            <p className="text-sm text-muted-foreground">
-              Optional
-            </p>
+            <p className="text-sm text-muted-foreground">Optional</p>
 
             <FormMessage />
           </FormItem>
@@ -87,10 +70,7 @@ export function BatchFields({
           <FormItem>
             <FormLabel>Teacher</FormLabel>
 
-            <Select
-              onValueChange={field.onChange}
-              value={field.value}
-            >
+            <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select teacher" />
@@ -99,10 +79,7 @@ export function BatchFields({
 
               <SelectContent>
                 {teachers.map((teacher) => (
-                  <SelectItem
-                    key={teacher.id}
-                    value={teacher.id}
-                  >
+                  <SelectItem key={teacher.id} value={teacher.id}>
                     {teacher.name}
                   </SelectItem>
                 ))}
@@ -120,16 +97,10 @@ export function BatchFields({
           name="startDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Start Date
-              </FormLabel>
+              <FormLabel>Start Date</FormLabel>
 
               <FormControl>
-                <Input
-                  type="date"
-                  {...field}
-                  value={field.value ?? ""}
-                />
+                <Input type="date" {...field} value={field.value ?? ""} />
               </FormControl>
 
               <FormMessage />
@@ -142,16 +113,10 @@ export function BatchFields({
           name="endDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                End Date
-              </FormLabel>
+              <FormLabel>End Date</FormLabel>
 
               <FormControl>
-                <Input
-                  type="date"
-                  {...field}
-                  value={field.value ?? ""}
-                />
+                <Input type="date" {...field} value={field.value ?? ""} />
               </FormControl>
 
               <FormMessage />

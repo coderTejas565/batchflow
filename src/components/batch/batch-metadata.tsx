@@ -6,9 +6,7 @@ type BatchMetadataProps = {
   batch: BatchDetailsDTO;
 };
 
-export function BatchMetadata({
-  batch,
-}: BatchMetadataProps) {
+export function BatchMetadata({ batch }: BatchMetadataProps) {
   const items = [
     {
       label: "Teacher",
@@ -20,22 +18,15 @@ export function BatchMetadata({
     },
     {
       label: "Start Date",
-      value: batch.startDate
-        ? format(batch.startDate, "dd MMM yyyy")
-        : "Not set",
+      value: batch.startDate ? format(batch.startDate, "dd MMM yyyy") : "Not set",
     },
     {
       label: "End Date",
-      value: batch.endDate
-        ? format(batch.endDate, "dd MMM yyyy")
-        : "Not set",
+      value: batch.endDate ? format(batch.endDate, "dd MMM yyyy") : "Not set",
     },
     {
       label: "Created",
-      value: format(
-        batch.createdAt,
-        "dd MMM yyyy",
-      ),
+      value: format(batch.createdAt, "dd MMM yyyy"),
     },
   ];
 
@@ -43,13 +34,9 @@ export function BatchMetadata({
     <div className="grid gap-4 sm:grid-cols-2">
       {items.map((item) => (
         <div key={item.label}>
-          <p className="text-sm font-medium">
-            {item.label}
-          </p>
+          <p className="text-sm font-medium">{item.label}</p>
 
-          <p className="text-sm text-muted-foreground">
-            {item.value}
-          </p>
+          <p className="text-sm text-muted-foreground">{item.value}</p>
         </div>
       ))}
     </div>

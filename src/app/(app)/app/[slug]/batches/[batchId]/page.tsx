@@ -5,16 +5,14 @@ import { getBatchDetailsAction } from "@/modules/batch";
 
 import { BatchDetailsCard } from "@/components/batch/batch-details-card";
 
-type BatchPageProps = {
+type BatchDetailsPageProps = {
   params: Promise<{
     slug: string;
     batchId: string;
   }>;
 };
 
-export default async function BatchPage({
-  params,
-}: BatchPageProps) {
+export default async function BatchDetailsPage({ params }: BatchDetailsPageProps) {
   const { slug, batchId } = await params;
 
   const workspace = await getCurrentWorkspace(slug);
@@ -28,15 +26,11 @@ export default async function BatchPage({
     notFound();
   }
 
-  const canManage =
-    workspace.membership.role === "owner";
+  const canManage = workspace.membership.role === "owner";
 
   return (
     <div className="space-y-6">
-      <BatchDetailsCard
-        batch={result.data}
-        canManage={canManage}
-      />
+      <BatchDetailsCard batch={result.data} canManage={canManage} />
     </div>
   );
 }

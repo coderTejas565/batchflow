@@ -6,19 +6,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import {
-  createBatchAction,
-  type CreateBatchFormValues,
-  type TeacherOptionDTO,
-} from "@/modules/batch";
+import { createBatchAction } from "@/modules/batch/batch.actions";
 
-import { createBatchSchema } from "@/modules/batch/batch.validation";
+import type { CreateBatchFormValues, TeacherOptionDTO } from "@/modules/batch/batch.types";
+
+import { createBatchFormSchema } from "@/modules/batch";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 import { BatchFields } from "./batch-fields";
-
 
 type BatchFormProps = {
   slug: string;
@@ -26,21 +23,13 @@ type BatchFormProps = {
   onSuccess: () => void;
 };
 
-
-export function BatchForm({
-  slug,
-  teachers,
-  onSuccess,
-}: BatchFormProps) {
-
+export function BatchForm({ slug, teachers, onSuccess }: BatchFormProps) {
   const router = useRouter();
 
-  const [pending, startTransition] =
-    useTransition();
-
+  const [pending, startTransition] = useTransition();
 
   const form = useForm<CreateBatchFormValues>({
-    resolver: zodResolver(createBatchSchema),
+    resolver: zodResolver(createBatchFormSchema),
 
     defaultValues: {
       name: "",
@@ -51,31 +40,20 @@ export function BatchForm({
     },
   });
 
-
-  function onSubmit(
-    values: CreateBatchFormValues,
-  ) {
-
+  function onSubmit(values: CreateBatchFormValues) {
     startTransition(async () => {
+      const result = await createBatchAction({
+        slug,
 
-      const result =
-        await createBatchAction({
-          slug,
-
-          ...values,
-        });
-
+        ...values,
+      });
 
       if (!result.success) {
         toast.error(result.error);
         return;
       }
 
-
-      toast.success(
-        "Batch created successfully.",
-      );
-
+      toast.success("Batch created successfully.");
 
       form.reset();
 
@@ -85,33 +63,15 @@ export function BatchForm({
     });
   }
 
-
   return (
     <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <BatchFields control={form.control} teachers={teachers} />
 
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
-      >
-
-        <BatchFields
-          control={form.control}
-          teachers={teachers}
-        />
-
-
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={pending}
-        >
-          {pending
-            ? "Creating..."
-            : "Create Batch"}
+        <Button type="submit" className="w-full" disabled={pending}>
+          {pending ? "Creating..." : "Create Batch"}
         </Button>
-
       </form>
-
     </Form>
   );
 }

@@ -29,14 +29,8 @@ const statusConfig: Record<
   },
 };
 
-export function BatchStatusBadge({
-  status,
-}: BatchStatusBadgeProps) {
+export function BatchStatusBadge({ status }: BatchStatusBadgeProps) {
   const config = statusConfig[status];
 
-  return (
-    <Badge variant={config.variant}>
-      {config.label}
-    </Badge>
-  );
+  return <Badge variant={config.variant}>{config.label}</Badge>;
 }

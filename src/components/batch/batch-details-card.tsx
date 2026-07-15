@@ -18,10 +18,7 @@ type BatchDetailsCardProps = {
   canManage: boolean;
 };
 
-export function BatchDetailsCard({
-  batch,
-  canManage,
-}: BatchDetailsCardProps) {
+export function BatchDetailsCard({ batch, canManage }: BatchDetailsCardProps) {
   return (
     <Card className="max-w-3xl">
       <CardHeader className="space-y-4">
@@ -29,16 +26,10 @@ export function BatchDetailsCard({
           <div className="space-y-1">
             <CardTitle>{batch.name}</CardTitle>
 
-            {batch.description && (
-              <CardDescription>
-                {batch.description}
-              </CardDescription>
-            )}
+            {batch.description && <CardDescription>{batch.description}</CardDescription>}
           </div>
 
-          <BatchStatusBadge
-            status={batch.status}
-          />
+          <BatchStatusBadge status={batch.status} />
         </div>
       </CardHeader>
 
@@ -48,9 +39,7 @@ export function BatchDetailsCard({
 
       {canManage && (
         <CardFooter>
-          <BatchActions
-            canManage={canManage}
-          />
+          <BatchActions canManage={canManage} />
         </CardFooter>
       )}
     </Card>

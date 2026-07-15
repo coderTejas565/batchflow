@@ -1,67 +1,37 @@
-import { notFound } from "next/navigation";
+import { getCurrentWorkspace } from "@/modules/workspace";
+import { getBatchPage } from "@/modules/batch/batch.service";
 
-import {
-  getBatchPageAction,
-} from "@/modules/batch";
-
-import {
-  getCurrentWorkspace,
-} from "@/modules/workspace";
-
-import { CreateBatchButton } from "@/components/batch/create-batch-button";
 import { BatchList } from "@/components/batch/batch-list";
+import { CreateBatchButton } from "@/components/batch/create-batch-button";
 
-export default async function BatchesPage({
-  params,
-}: {
+type BatchesPageProps = {
   params: Promise<{
     slug: string;
   }>;
-}) {
+};
+
+export default async function BatchesPage({ params }: BatchesPageProps) {
   const { slug } = await params;
 
-  const workspace =
-    await getCurrentWorkspace(slug);
+  const workspace = await getCurrentWorkspace(slug);
 
-  const result =
-    await getBatchPageAction(
-      workspace.institute.id,
-    );
-
-  if (!result.success) {
-    notFound();
-  }
-
-  const {
-    batches,
-    teachers,
-  } = result.data;
+  const data = await getBatchPage(workspace.institute.id);
 
   return (
-    <div className="space-y-8">
-
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
-            Batches
-          </h1>
+          <h1 className="text-2xl font-semibold">Batches</h1>
 
-          <p className="text-muted-foreground">
-            Manage your institute batches.
-          </p>
+          <p className="text-muted-foreground">Manage institute batches</p>
         </div>
 
-        {workspace.membership.role ===
-          "owner" && (
-          <CreateBatchButton
-            slug={slug}
-            teachers={teachers}
-          />
+        {workspace.membership.role === "owner" && (
+          <CreateBatchButton slug={slug} teachers={data.teachers} />
         )}
       </div>
 
-      <BatchList batches={batches} />
-
+      <BatchList batches={data.batches} />
     </div>
   );
 }

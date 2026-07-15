@@ -5,18 +5,9 @@ import { fail, ok, type Result } from "@/lib/result";
 
 import { getCurrentWorkspace } from "@/modules/workspace";
 
-import {
-  createBatch,
-  getBatchPage,
-  getBatchDetails,
-} from "./batch.service";
+import { createBatch, getBatchPage, getBatchDetails } from "./batch.service";
 
-import type {
-  BatchDTO,
-  BatchPageDTO,
-  BatchDetailsDTO,
-  CreateBatchFormValues,
-} from "./batch.types";
+import type { BatchDTO, BatchPageDTO, BatchDetailsDTO, CreateBatchFormValues } from "./batch.types";
 
 type CreateBatchActionInput = CreateBatchFormValues & {
   slug: string;
@@ -26,7 +17,6 @@ type GetBatchDetailsActionParams = {
   slug: string;
   batchId: string;
 };
-
 
 export async function getBatchPageAction(instituteId: string): Promise<Result<BatchPageDTO>> {
   try {
@@ -48,28 +38,26 @@ export async function createBatchAction(input: CreateBatchActionInput): Promise<
   try {
     const workspace = await getCurrentWorkspace(input.slug);
 
+
     if (workspace.membership.role !== "owner") {
       throw new UnauthorizedError("Only institute owners can create batches.");
     }
 
-const batch = await createBatch({
-  instituteId: workspace.institute.id,
-  createdBy: workspace.user.id,
+    const batch = await createBatch({
+      instituteId: workspace.institute.id,
+      createdBy: workspace.user.id,
 
-  name: input.name,
+      name: input.name,
 
-  description: input.description ?? null,
+      description: input.description ?? null,
 
-  teacherId: input.teacherId,
+      teacherId: input.teacherId,
 
-  startDate: input.startDate
-    ? new Date(input.startDate)
-    : null,
+      startDate: input.startDate ? new Date(input.startDate) : null,
 
-  endDate: input.endDate
-    ? new Date(input.endDate)
-    : null,
-});
+      endDate: input.endDate ? new Date(input.endDate) : null,
+    });
+
 
     return ok(batch);
   } catch (error) {
@@ -90,10 +78,7 @@ export async function getBatchDetailsAction({
   try {
     const workspace = await getCurrentWorkspace(slug);
 
-    const batch = await getBatchDetails(
-      workspace.institute.id,
-      batchId,
-    );
+    const batch = await getBatchDetails(workspace.institute.id, batchId);
 
     return ok(batch);
   } catch (error) {
@@ -103,9 +88,6 @@ export async function getBatchDetailsAction({
 
     console.error("Get batch details failed:", error);
 
-    return fail(
-      "Failed to load batch.",
-      "UNKNOWN",
-    );
+    return fail("Failed to load batch.", "UNKNOWN");
   }
 }
